@@ -76,7 +76,7 @@ nav a.active{
         background-color: #161616;
         border-top: 0.1 rem solid rgba(0,0,0,0.1);
     }
-}
+
 nav.active{
     display: block;
 }
@@ -91,6 +91,24 @@ nav a.active{
     border-radius: 0.5 rem;
     color: #b74b4b;
     border-bottom: 0.5 rem solid #b74b4b;
-    
+
+   }
 }
+section{
+    min-height: 100vh;
+    padding: 5 rem 9% 5 rem;
+}
+.home{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8 rem;
+    background-color: black;
+}
+.home.home-content{
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
 
