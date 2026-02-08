@@ -7,7 +7,7 @@ The portfolio showcases my projects, skills, and learning progress as a software
 
 ## Live Website
 You can view the live site here:  
-https://praisejoy.github.io
+[https://praisejoy.github.io](https://praisejoy14.github.io/praisejoy.github.io/)
 
 ## Technologies Used
 - HTML
