@@ -628,6 +628,7 @@
         </div>
         <div class="form-success" id="formSuccess">✅ Message sent! I'll be in touch soon.</div>
         <button class="btn-primary" onclick="handleSubmit()" style="border:none;cursor:pointer;width:fit-content;">Send Message</button>
+        <div id="formError" style="display:none;color:#e07070;font-size:0.9rem;margin-top:0.5rem;">❌ Something went wrong. Please try again.</div>
       </div>
     </div>
   </section>
@@ -681,18 +682,41 @@
     reveals.forEach(r => observer.observe(r));
 
     // ── CONTACT FORM ──
-    function handleSubmit() {
+    async function handleSubmit() {
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
       const message = document.getElementById('message').value.trim();
       if (!name || !email || !message) { alert('Please fill in your name, email, and message.'); return; }
-      const success = document.getElementById('formSuccess');
-      success.style.display = 'block';
-      setTimeout(() => success.style.display = 'none', 5000);
-      document.getElementById('name').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('subject').value = '';
-      document.getElementById('message').value = '';
+
+      const btn = document.querySelector('#contact .btn-primary');
+      btn.textContent = 'Sending...';
+      btn.style.opacity = '0.7';
+
+      try {
+        const response = await fetch('https://formspree.io/f/xrejbwpg', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message })
+        });
+
+        if (response.ok) {
+          const success = document.getElementById('formSuccess');
+          success.style.display = 'block';
+          setTimeout(() => success.style.display = 'none', 6000);
+          document.getElementById('name').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('subject').value = '';
+          document.getElementById('message').value = '';
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      } catch (err) {
+        alert('Failed to send. Please check your connection and try again.');
+      }
+
+      btn.textContent = 'Send Message';
+      btn.style.opacity = '1';
     }
 
     // ── SMOOTH NAV ACTIVE ──
