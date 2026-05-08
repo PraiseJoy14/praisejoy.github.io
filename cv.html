@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Praisejoy Naliaka — Interactive CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0f;
+      --surface: #13131a;
+      --card: #1a1a24;
+      --accent: #c8a96e;
+      --accent2: #e8c99a;
+      --text: #f0ece4;
+      --muted: #8a8490;
+      --border: rgba(200,169,110,0.15);
+      --green: #1D9E75;
+      --green-light: #E1F5EE;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 6%;
+      background: rgba(11,11,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 8rem 6% 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HERO ── */
+    .cv-hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+
+    .cv-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--text);
+    }
+
+    .cv-name span { color: var(--accent); }
+
+    .cv-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 0.6rem;
+    }
+
+    .cv-bio {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-top: 1rem;
+      max-width: 520px;
+    }
+
+    .cv-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.4rem;
+    }
+
+    .cv-contact-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .cv-contact-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .cv-contact-pill i { font-size: 13px; color: var(--accent); }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(200,169,110,0.12);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── SECTION ── */
+    .cv-section {
+      margin-bottom: 2rem;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+    .cv-section:nth-child(2) { animation-delay: 0.1s; }
+    .cv-section:nth-child(3) { animation-delay: 0.2s; }
+    .cv-section:nth-child(4) { animation-delay: 0.3s; }
+    .cv-section:nth-child(5) { animation-delay: 0.4s; }
+
+    .cv-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .cv-section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .cv-section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: right;
+      padding-top: 1rem;
+      line-height: 1.5;
+    }
+
+    .timeline-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .timeline-card:hover { border-color: rgba(200,169,110,0.4); transform: translateX(4px); }
+    .timeline-card:hover::before { opacity: 1; }
+    .timeline-card.open { border-color: rgba(200,169,110,0.35); }
+    .timeline-card.open::before { opacity: 1; }
+
+    .timeline-role {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .timeline-org {
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin-top: 3px;
+    }
+
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 8px;
+      user-select: none;
+    }
+
+    .expand-hint i {
+      font-size: 13px;
+      transition: transform 0.3s;
+    }
+
+    .expand-hint.open i { transform: rotate(180deg); }
+
+    .timeline-details {
+      display: none;
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .timeline-details.open { display: block; }
+
+    .timeline-details ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .timeline-details ul li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .timeline-details ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .skill-pill {
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--card);
+      transition: all 0.25s;
+      cursor: default;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200,169,110,0.06);
+    }
+
+    /* ── EDUCATION ── */
+    .edu-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .edu-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1.2rem;
+    }
+
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.875rem 1.25rem;
+      transition: border-color 0.3s;
+    }
+    .edu-card:hover { border-color: rgba(200,169,110,0.35); }
+
+    .edu-degree {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .edu-school {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── REFERENCES ── */
+    .refs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .ref-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: border-color 0.3s;
+    }
+    .ref-card:hover { border-color: rgba(200,169,110,0.35); }
+
+    .ref-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(200,169,110,0.1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .ref-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .ref-role {
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .ref-contact {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      line-height: 1.8;
+    }
+
+    /* ── DOWNLOAD BTN ── */
+    .download-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 2.5rem;
+      animation: fadeUp 0.7s 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0b0b0f;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.3s, color 0.3s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .cv-hero { grid-template-columns: 1fr; }
+      .avatar { display: none; }
+      .timeline-item, .edu-item { grid-template-columns: 1fr; }
+      .timeline-date { text-align: left; padding-top: 0; }
+      .refs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Praise</a>
+    <a href="index.html" class="nav-back">
+      <i class="ti ti-arrow-left"></i> Back to Portfolio
+    </a>
+  </nav>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <div class="cv-hero">
+      <div>
+        <div class="cv-name">Praisejoy<br><span>Naliaka</span></div>
+        <div class="cv-title">IT Specialist &amp; Frontend Developer</div>
+        <p class="cv-bio">
+          Energetic IT specialist with hands-on experience in technical support and equipment maintenance gained through internships at TV47. Proficient in troubleshooting network and system issues while ensuring seamless live broadcast operations. Diploma in Business and Information Technology & Certificate in Software Development and Python Programming.
+        </p>
+        <div class="cv-contacts">
+          <a href="tel:+254711288964" class="cv-contact-pill"><i class="ti ti-phone"></i> +254 711 288 964</a>
+          <a href="mailto:Praisejoynaliaka1@gmail.com" class="cv-contact-pill"><i class="ti ti-mail"></i> Praisejoynaliaka1@gmail.com</a>
+          <a href="https://linkedin.com/in/praisejoy-naliakaa47085274/" target="_blank" class="cv-contact-pill"><i class="ti ti-brand-linkedin"></i> LinkedIn</a>
+          <span class="cv-contact-pill"><i class="ti ti-map-pin"></i> Nairobi, Kenya</span>
+        </div>
+      </div>
+      <div class="avatar">PN</div>
+    </div>
+
+    <!-- WORK EXPERIENCE -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-label"><i class="ti ti-briefcase"></i> Work Experience</span>
+        <div class="cv-section-line"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">May – Aug 2024</div>
+        <div class="timeline-card" onclick="toggleCard(this)">
+          <div class="timeline-role">Attachment — Technical Department</div>
+          <div class="timeline-org">TV47</div>
+          <div class="expand-hint"><i class="ti ti-chevron-down"></i> Show details</div>
+          <div class="timeline-details">
+            <ul>
+              <li>Set up cameras, microphones and lighting for studio and field shoots</li>
+              <li>Supported live broadcasts ensuring smooth signal transmission</li>
+              <li>Assisted in troubleshooting and maintaining studio equipment</li>
+              <li>Provided basic network and system IT support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">Jan – Apr 2024</div>
+        <div class="timeline-card" onclick="toggleCard(this)">
+          <div class="timeline-role">Internship — Technical Department</div>
+          <div class="timeline-org">TV47</div>
+          <div class="expand-hint"><i class="ti ti-chevron-down"></i> Show details</div>
+          <div class="timeline-details">
+            <ul>
+              <li>Maintained studio equipment and facilitated seamless equipment setup</li>
+              <li>Configured cameras, microphones and lighting ensuring optimal performance</li>
+              <li>Diagnosed and troubleshot network and system issues to minimize downtime</li>
+              <li>Supported the technical department across studio and field operations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-label"><i class="ti ti-school"></i> Education</span>
+        <div class="cv-section-line"></div>
+      </div>
+      <div class="edu-grid">
+        <div class="edu-item">
+          <div class="timeline-date">2023 – 2025</div>
+          <div class="edu-card">
+            <div class="edu-degree">Diploma in Business &amp; Information Technologies</div>
+            <div class="edu-school">Kiriri Women's University of Science and Technology</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="timeline-date">Jan – Apr 2023</div>
+          <div class="edu-card">
+            <div class="edu-degree">Certificate in Software Development &amp; Python Programming</div>
+            <div class="edu-school">Modcom Learning Institute</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="timeline-date">2019 – 2022</div>
+          <div class="edu-card">
+            <div class="edu-degree">Kenya Certificate of Secondary Education</div>
+            <div class="edu-school">Moi Girls' High School Kamusinga</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="timeline-date">2008 – 2017</div>
+          <div class="edu-card">
+            <div class="edu-degree">Kenya Certificate of Primary Education</div>
+            <div class="edu-school">Home Candle Academy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-label"><i class="ti ti-bolt"></i> Skills</span>
+        <div class="cv-section-line"></div>
+      </div>
+      <div class="skills-wrap">
+        <span class="skill-pill">Technical Support</span>
+        <span class="skill-pill">Network Troubleshooting</span>
+        <span class="skill-pill">Broadcast Operations</span>
+        <span class="skill-pill">Equipment Maintenance</span>
+        <span class="skill-pill">Python Programming</span>
+        <span class="skill-pill">HTML &amp; CSS</span>
+        <span class="skill-pill">JavaScript</span>
+        <span class="skill-pill">Data Analytics</span>
+        <span class="skill-pill">Problem Solving</span>
+        <span class="skill-pill">Team Player</span>
+        <span class="skill-pill">Time Management</span>
+        <span class="skill-pill">Decision Making</span>
+      </div>
+    </div>
+
+    <!-- REFERENCES -->
+    <div class="cv-section">
+      <div class="cv-section-header">
+        <span class="cv-section-label"><i class="ti ti-users"></i> References</span>
+        <div class="cv-section-line"></div>
+      </div>
+      <div class="refs-grid">
+        <div class="ref-card">
+          <div class="ref-avatar">JK</div>
+          <div class="ref-name">Joyce Karanja</div>
+          <div class="ref-role">Media Manager — Essense Mediacom</div>
+          <div class="ref-contact">
+            <i class="ti ti-phone" style="font-size:12px;"></i> 0724 006933<br>
+            <i class="ti ti-mail" style="font-size:12px;"></i> juojoyce15@gmail.com
+          </div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-avatar">LU</div>
+          <div class="ref-name">Lynnet Ungaji</div>
+          <div class="ref-role">Housekeeping Manager — Beausite Hotel, UK</div>
+          <div class="ref-contact">
+            <i class="ti ti-phone" style="font-size:12px;"></i> 0721 654821<br>
+            <i class="ti ti-mail" style="font-size:12px;"></i> shyuga.shyuga@gmail.com
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="download-wrap">
+      <div class="btn-group">
+        <a href="index.html" class="btn-outline"><i class="ti ti-arrow-left"></i> Back to Portfolio</a>
+        <button class="btn-primary" onclick="window.print()"><i class="ti ti-download"></i> Download / Print CV</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleCard(card) {
+      const details = card.querySelector('.timeline-details');
+      const hint = card.querySelector('.expand-hint');
+      const isOpen = details.classList.contains('open');
+      details.classList.toggle('open', !isOpen);
+      hint.classList.toggle('open', !isOpen);
+      card.classList.toggle('open', !isOpen);
+      hint.childNodes[1].textContent = isOpen ? ' Show details' : ' Hide details';
+    }
+  </script>
+
+</body>
+</html>
